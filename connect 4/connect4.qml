@@ -35,16 +35,24 @@ MainView {
                 PopupUtils.open(winDialog, null)
             } else {
                 Model.switchTurn();
-
-                if (againstMachine.checked) {
-                    var bestMove = Model.getBestMove(7);
-                    newRow = Model.set(bestMove);
-                    repeater.itemAt(newRow * 7 + bestMove % 7).setPlayer(Model.turn);
-                    if (Model.haveWinner(bestMove % 7))
-                        PopupUtils.open(winDialog, null)
-                    Model.switchTurn();
-                }
+                if (againstMachine.checked)
+                    machineMove();
             }
+        }
+    }
+
+    function machineMove() {
+        var bestMove = Model.getBestMove(7);
+        var newRow = Model.set(bestMove);
+        repeater.itemAt(newRow * 7 + bestMove % 7).setPlayer(Model.turn);
+        if (Model.haveWinner(bestMove % 7))
+            PopupUtils.open(winDialog, null)
+        Model.switchTurn();
+    }
+
+    Component.onCompleted: {
+        if (!goFirst.checked) {
+            machineMove();
         }
     }
 
@@ -52,6 +60,10 @@ MainView {
         Model.reset();
         for (var i = 0; i < 42; i++)
             repeater.itemAt(i).color = "white";
+
+        if (!goFirst.checked) {
+            machineMove();
+        }
     }
     
     Tabs {
