@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Ubuntu.Components 0.1
 import Ubuntu.Components.Popups 0.1
+import Ubuntu.Components.ListItems 0.1 as ListItem
 import "model.js" as Model
 
 /*!
@@ -115,7 +116,7 @@ MainView {
 
                             iconSource: Qt.resolvedUrl("new.png")
                             text: i18n.tr("New Game")
-                            onTriggered: main.reset()
+                            onTriggered: PopupUtils.open(newDialog, null)
                        }
                     }
                 }
@@ -124,6 +125,32 @@ MainView {
 
         Tab {
             title: "Settings"
+            page: Page {
+                id: settingsPage
+
+                Column {
+                    anchors.fill: parent
+
+                    ListItem.Standard {
+                        text: i18n.tr("Play against machine")
+                        control: Switch {
+                            id: againstMachine
+                            anchors.verticalCenter: parent.verticalCenter
+                            checked: true
+                        }
+                    }
+
+                    ListItem.Standard {
+                        text: i18n.tr("Go first")
+                        control: Switch {
+                            id: goFirst
+                            anchors.verticalCenter: parent.verticalCenter
+                            enabled: againstMachine.checked
+                            checked: true
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -135,6 +162,33 @@ MainView {
 
             title: i18n.tr("Winner!")
             text: i18n.tr(Model.turn ? "Orange won the game." : "Purple won the game.")
+
+            Button {
+                text: i18n.tr("Back")
+                gradient: UbuntuColors.greyGradient
+                onClicked: {
+                    PopupUtils.close(dialogue);
+                }
+            }
+
+            Button {
+                text: i18n.tr("New Game")
+                onClicked: {
+                    reset();
+                    PopupUtils.close(dialogue);
+                }
+            }
+        }
+    }
+
+    Component {
+        id: newDialog
+
+        Dialog {
+            id: dialogue
+
+            title: i18n.tr("Reset")
+            text: i18n.tr("Reset the current game?")
 
             Button {
                 text: i18n.tr("Back")
