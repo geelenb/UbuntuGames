@@ -56,7 +56,7 @@ MainView {
     Tabs {
         id: tabs
         Tab {
-            title: "Connect 4"
+            title: i18n.tr("Connect 4")
 
             page: Page {
                 id: gamePage
@@ -133,11 +133,11 @@ MainView {
         Dialog {
             id: dialogue
 
-            title: "Winner!"
-            text: (Model.turn ? "Orange" : "Purple") + " won the game."
+            title: i18n.tr("Winner!")
+            text: i18n.tr(Model.turn ? "Orange won the game." : "Purple won the game.")
 
             Button {
-                text: "Back"
+                text: i18n.tr("Back")
                 gradient: UbuntuColors.greyGradient
                 onClicked: {
                     PopupUtils.close(dialogue);
@@ -145,7 +145,7 @@ MainView {
             }
 
             Button {
-                text: "New Game"
+                text: i18n.tr("New Game")
                 onClicked: {
                     reset();
                     PopupUtils.close(dialogue);
