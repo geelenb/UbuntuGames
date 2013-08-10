@@ -27,21 +27,21 @@ MainView {
 
     // main functions
     function clicked(index) {
-        if (Model.turn === 0) {// TODO 2player mode
-            if (Model.possible(index)) {
-                var newRow = Model.set(index);
-                repeater.itemAt(newRow * 7 + index % 7).setPlayer(Model.turn);
-                if (Model.haveWinner(index % 7)) {
-                    PopupUtils.open(winDialog, null)
-                } else {
-                    Model.switchTurn();
+        if (Model.possible(index)) {
+            var newRow = Model.set(index);
+            repeater.itemAt(newRow * 7 + index % 7).setPlayer(Model.turn);
 
+            if (Model.haveWinner(index % 7)) {
+                PopupUtils.open(winDialog, null)
+            } else {
+                Model.switchTurn();
+
+                if (againstMachine.checked) {
                     var bestMove = Model.getBestMove(7);
                     newRow = Model.set(bestMove);
                     repeater.itemAt(newRow * 7 + bestMove % 7).setPlayer(Model.turn);
                     if (Model.haveWinner(bestMove % 7))
                         PopupUtils.open(winDialog, null)
-
                     Model.switchTurn();
                 }
             }
