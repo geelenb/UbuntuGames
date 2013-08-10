@@ -38,10 +38,8 @@ MainView {
                     var bestMove = Model.getBestMove(7);
                     newRow = Model.set(bestMove);
                     repeater.itemAt(newRow * 7 + bestMove % 7).setPlayer(Model.turn);
-                    if (Model.haveWinner(bestMove % 7)) {
-                        setTimeout(PopupUtils.open(winDialog, null), 100)
-
-                    }
+                    if (Model.haveWinner(bestMove % 7))
+                        PopupUtils.open(winDialog, null)
 
                     Model.switchTurn();
                 }
