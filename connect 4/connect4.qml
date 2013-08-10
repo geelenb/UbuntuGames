@@ -107,15 +107,16 @@ MainView {
                         }
                     }
                 }
-
                 tools: ToolbarItems {
+                    id: toolbarTimer
                     ToolbarButton {
-                        text: "New Game"
                         action: Action {
+                            id: resetButton
+
                             iconSource: Qt.resolvedUrl("new.png")
+                            text: i18n.tr("New Game")
                             onTriggered: main.reset()
-                            visible: true
-                        }
+                       }
                     }
                 }
             }
