@@ -42,7 +42,7 @@ MainView {
     }
 
     function machineMove() {
-        var bestMove = Model.getBestMove(7);
+        var bestMove = Model.getBestMove(parseInt(difficulty.values[difficulty.selectedIndex]));
         var newRow = Model.set(bestMove);
         repeater.itemAt(newRow * 7 + bestMove % 7).setPlayer(Model.turn);
         if (Model.haveWinner(bestMove % 7))
@@ -160,6 +160,13 @@ MainView {
                             enabled: againstMachine.checked
                             checked: true
                         }
+                    }
+
+                    ListItem.ValueSelector {
+                        id: difficulty
+                        text: i18n.tr("Difficulty")
+                        values: ["1", "3", "5", "7"]
+                        selectedIndex: 3
                     }
                 }
             }

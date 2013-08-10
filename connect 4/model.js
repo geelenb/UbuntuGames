@@ -143,6 +143,7 @@ function getPossibleMoves () {
 }
 
 function getBestMove(depth) {
+    console.debug("getBestMove(" + depth + ")")
     var bestMove = -1;
     var posMoves = shuffleArray(getPossibleMoves());
 
