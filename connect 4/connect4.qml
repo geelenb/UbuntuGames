@@ -25,15 +25,16 @@ MainView {
     width: units.gu(40)
     height: units.gu(75)
 
+    property string p1: "#DD4814"
+    property string p0: "#2C001E"
+
     // main functions
     function clicked(index) {
         if (Model.possible(index)) {
             var newRow = Model.set(index);
             repeater.itemAt(newRow * 7 + index % 7).setPlayer(Model.turn);
 
-            if (Model.haveWinner(index % 7)) {
-                PopupUtils.open(winDialog, null)
-            } else {
+            if (!checkEnding(index)) {
                 Model.switchTurn();
                 if (againstMachine.checked)
                     machineMove();
@@ -41,13 +42,32 @@ MainView {
         }
     }
 
+    function checkEnding(lastMove) {
+        if (Model.haveWinner(lastMove % 7)) {
+            PopupUtils.open(winDialog, null);
+            return true;
+        }
+
+        var free = 0;
+        for (var i = 0; i < 7; i++)
+            if (Model.state[0][i] === -1)
+                free++;
+
+        if (free === 0) {
+            PopupUtils.open(tieDialog, null);
+            return true;
+        }
+        return false;
+    }
+
     function machineMove() {
         var bestMove = Model.getBestMove(parseInt(difficulty.values[difficulty.selectedIndex]));
         var newRow = Model.set(bestMove);
         repeater.itemAt(newRow * 7 + bestMove % 7).setPlayer(Model.turn);
-        if (Model.haveWinner(bestMove % 7))
+        if (checkEnding(bestMove % 7))
             PopupUtils.open(winDialog, null)
-        Model.switchTurn();
+        else
+            Model.switchTurn();
     }
 
     Component.onCompleted: {
@@ -104,12 +124,14 @@ MainView {
                                 radius: "medium"
                                 color: "white"
 
+
+
                                 //only 0 or 1
                                 function setPlayer(player) {
                                     if (player)
-                                        color = "#DD4814"
+                                        color = p1
                                     else
-                                        color = "#2C001E"
+                                        color = p0
                                 }
 
                                 MouseArea {
@@ -120,6 +142,7 @@ MainView {
                         }
                     }
                 }
+
                 tools: ToolbarItems {
                     id: toolbarTimer
                     ToolbarButton {
@@ -208,6 +231,33 @@ MainView {
 
             title: i18n.tr("Reset")
             text: i18n.tr("Reset the current game?")
+
+            Button {
+                text: i18n.tr("Back")
+                gradient: UbuntuColors.greyGradient
+                onClicked: {
+                    PopupUtils.close(dialogue);
+                }
+            }
+
+            Button {
+                text: i18n.tr("New Game")
+                onClicked: {
+                    reset();
+                    PopupUtils.close(dialogue);
+                }
+            }
+        }
+    }
+
+    Component {
+        id: tieDialog
+
+        Dialog {
+            id: dialogue
+
+            title: i18n.tr("Tie!")
+            text: i18n.tr("It's a tied game!")
 
             Button {
                 text: i18n.tr("Back")
