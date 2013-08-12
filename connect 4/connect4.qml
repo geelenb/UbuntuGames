@@ -64,10 +64,8 @@ MainView {
         var bestMove = Model.getBestMove(parseInt(difficulty.values[difficulty.selectedIndex]));
         var newRow = Model.set(bestMove);
         repeater.itemAt(newRow * 7 + bestMove % 7).setPlayer(Model.turn);
-        if (checkEnding(bestMove % 7))
-            PopupUtils.open(winDialog, null)
-        else
-            Model.switchTurn();
+        checkEnding(bestMove % 7)
+        Model.switchTurn();
     }
 
     Component.onCompleted: {

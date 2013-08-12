@@ -143,7 +143,6 @@ function getPossibleMoves () {
 }
 
 function getBestMove(depth) {
-    console.debug("getBestMove(" + depth + ")")
     var bestMove = -1;
     var posMoves = shuffleArray(getPossibleMoves());
 
@@ -228,6 +227,5 @@ function printState() {
         var s = state[i].join();
         for (var j = 0; j < 7; j++)
             s = s.replace("-1", " ");
-        console.log(s);
     }
 }

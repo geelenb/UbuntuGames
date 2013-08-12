@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=connect4
-Comment=My project description
+Name=Connect 4
+Comment=Connect 4
 Exec=/usr/bin/qmlscene $@ /usr/share/connect4/connect4.qml
 Icon=qmlscene
 Terminal=false
