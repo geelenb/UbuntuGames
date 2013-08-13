@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Reversi
+Comment=Reversi
+Exec=/usr/bin/qmlscene $@ /usr/share/reversi/reversi.qml
+Icon=qmlscene
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
