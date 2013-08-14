@@ -32,7 +32,8 @@ MainView {
     function clicked(index) {
         if (Model.possible(index)) {
             var newRow = Model.set(index);
-            repeater.itemAt(newRow * 7 + index % 7).setPlayer(Model.turn);
+            //repeater.itemAt(newRow * 7 + index % 7).setPlayer(Model.turn);
+            fallingAnimation.run(newRow * 7 + index % 7);
 
             if (!checkEnding(index)) {
                 Model.switchTurn();
@@ -68,16 +69,14 @@ MainView {
         Model.switchTurn();
     }
 
-    Component.onCompleted: {
-        if (!goFirst.checked) {
-            machineMove();
-        }
-    }
+    Component.onCompleted: reset();
 
     function reset() {
         Model.reset();
         for (var i = 0; i < 42; i++)
             repeater.itemAt(i).color = "white";
+
+        fallingCoin.x = -10000
 
         if (!goFirst.checked) {
             machineMove();
@@ -135,6 +134,51 @@ MainView {
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: main.clicked(index)
+                                }
+                            }
+                        }
+                    }
+
+                    UbuntuShape {
+                        id: fallingCoin
+
+                        width: (gameField.width - units.gu(6)) / 7
+                        height: width
+                        color: "transparent"
+
+//                        z: -10
+
+                        // to change
+                        x: 0
+                        y: 0
+
+                        SequentialAnimation {
+                            id: fallingAnimation
+
+                            property int index: 0;
+
+                            function run(i) {
+                                index = i;
+                                yChange.to = repeater.itemAt(i).y;
+                                yChange.duration = yChange.to;
+                                fallingCoin.x = repeater.itemAt(i).x;
+                                fallingCoin.y = 0;
+                                fallingCoin.color = Model.turn ? p1 : p0
+                                repeater.itemAt(i).z = -11
+                                fallingAnimation.start();
+                            }
+
+                            NumberAnimation {
+                                id: yChange
+                                target: fallingCoin;
+                                property: "y";
+                                duration: 0
+                                to: 0
+                            }
+
+                            ScriptAction {
+                                script: {
+                                    repeater.itemAt(fallingAnimation.index).setPlayer(Model.turn);
                                 }
                             }
                         }

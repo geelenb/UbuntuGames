@@ -16,7 +16,7 @@ function getColumn (index) {
 }
 
 function getRow (index) {
-    return index / 7;
+    return Math.floor(index / 7);
 }
 
 function set (index) {
