@@ -32,14 +32,7 @@ MainView {
     function clicked(index) {
         if (Model.possible(index)) {
             var newRow = Model.set(index);
-            //repeater.itemAt(newRow * 7 + index % 7).setPlayer(Model.turn);
             fallingAnimation.run(newRow * 7 + index % 7);
-
-            if (!checkEnding(index)) {
-                Model.switchTurn();
-                if (againstMachine.checked)
-                    machineMove();
-            }
         }
     }
 
@@ -64,9 +57,13 @@ MainView {
     function machineMove() {
         var bestMove = Model.getBestMove(parseInt(difficulty.values[difficulty.selectedIndex]));
         var newRow = Model.set(bestMove);
+        fallingAnimation2.run(newRow * 7 + bestMove);
+        /*
         repeater.itemAt(newRow * 7 + bestMove % 7).setPlayer(Model.turn);
+
         checkEnding(bestMove % 7)
         Model.switchTurn();
+        */
     }
 
     Component.onCompleted: reset();
@@ -77,10 +74,10 @@ MainView {
             repeater.itemAt(i).color = "white";
 
         fallingCoin.x = -10000
+        fallingCoin2.x = -10000
 
-        if (!goFirst.checked) {
+        if (!goFirst.checked)
             machineMove();
-        }
     }
     
     Tabs {
@@ -139,14 +136,14 @@ MainView {
                         }
                     }
 
+//                    Rectangle {
                     UbuntuShape {
                         id: fallingCoin
 
                         width: (gameField.width - units.gu(6)) / 7
                         height: width
                         color: "transparent"
-
-//                        z: -10
+//                        radius: "medium"
 
                         // to change
                         x: 0
@@ -179,6 +176,59 @@ MainView {
                             ScriptAction {
                                 script: {
                                     repeater.itemAt(fallingAnimation.index).setPlayer(Model.turn);
+
+                                    if (!checkEnding(fallingAnimation.index)) {
+                                        Model.switchTurn();
+                                        if (againstMachine.checked && Model.turn == goFirst.checked)
+                                            machineMove();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    UbuntuShape {
+                        id: fallingCoin2
+
+                        width: (gameField.width - units.gu(6)) / 7
+                        height: width
+                        color: "transparent"
+//                        radius: "medium"
+
+                        // to change
+                        x: 0
+                        y: 0
+
+                        SequentialAnimation {
+                            id: fallingAnimation2
+
+                            property int index: 0;
+
+                            function run(i) {
+                                index = i;
+                                yChange2.to = repeater.itemAt(i).y;
+                                yChange2.duration = yChange2.to;
+                                fallingCoin2.x = repeater.itemAt(i).x;
+                                fallingCoin2.y = 0;
+                                fallingCoin2.color = Model.turn ? p1 : p0
+                                repeater.itemAt(i).z = -11
+                                fallingAnimation2.start();
+                            }
+
+                            NumberAnimation {
+                                id: yChange2
+                                target: fallingCoin2;
+                                property: "y";
+                                duration: 0
+                                to: 0
+                            }
+
+                            ScriptAction {
+                                script: {
+                                    repeater.itemAt(fallingAnimation2.index).setPlayer(Model.turn);
+
+                                    if (!checkEnding(fallingAnimation2.index))
+                                        Model.switchTurn();
                                 }
                             }
                         }
