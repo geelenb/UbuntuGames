@@ -206,11 +206,11 @@ function getBestMove(depth, array) {
     for (var i = 0; i < posMoves.length; i++) {
         var copy = arrayCopy(array);
         var delta = setOn(posMoves[i], copy); // how good this move is without its concequences
-        printState(copy);
+//        printState(copy);
 //        console.debug(delta);
         switchTurn();
         var nextResult = getBestMove(depth - 1, copy);
-        printState(copy)
+//        printState(copy)
         switchTurn();
 
         if (delta - nextResult[1] > result[1])

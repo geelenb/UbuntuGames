@@ -86,7 +86,7 @@ MainView {
     Tabs {
         id: tabs
         Tab {
-            title: i18n.tr("Connect 4")
+            title: i18n.tr("Reversi")
 
             page: Page {
                 id: gamePage
