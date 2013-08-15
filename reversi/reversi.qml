@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtMultimedia 5.0
 import Ubuntu.Components 0.1
 import Ubuntu.Components.Popups 0.1
 import Ubuntu.Components.ListItems 0.1 as ListItem
@@ -69,6 +70,8 @@ MainView {
     }
 
     function reset() {
+        if (playSound.checked)
+            resetSound.play();
         Model.reset();
         syncToModel();
 
@@ -82,7 +85,13 @@ MainView {
         for (var i = 0; i < posMoves.length; i++)
             repeater.itemAt(posMoves[i]).markPossible();
     }
-    
+
+
+    Audio {
+        id: resetSound
+        source: "sounds/reset.wav"
+    }
+
     Tabs {
         id: tabs
         Tab {
@@ -236,6 +245,15 @@ MainView {
 
                 Column {
                     anchors.fill: parent
+
+                    ListItem.Standard {
+                        text: i18n.tr("Sound")
+                        control: Switch {
+                            id: playSound
+                            anchors.verticalCenter: parent.verticalCenter
+                            checked: true
+                        }
+                    }
 
                     ListItem.Standard {
                         text: i18n.tr("Play against machine")
