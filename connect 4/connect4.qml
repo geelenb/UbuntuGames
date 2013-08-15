@@ -1,7 +1,9 @@
 import QtQuick 2.0
+import QtMultimedia 5.0
 import Ubuntu.Components 0.1
 import Ubuntu.Components.Popups 0.1
 import Ubuntu.Components.ListItems 0.1 as ListItem
+
 import "model.js" as Model
 
 /*!
@@ -69,6 +71,8 @@ MainView {
     Component.onCompleted: reset();
 
     function reset() {
+        if (playSound.checked)
+            resetSound.play();
         Model.reset();
         for (var i = 0; i < 42; i++)
             repeater.itemAt(i).color = "white";
@@ -78,6 +82,21 @@ MainView {
 
         if (!goFirst.checked)
             machineMove();
+    }
+
+    Audio {
+        id: resetSound
+        source: "sounds/reset.wav"
+    }
+
+    Audio {
+        id: dropSound
+        source: "sounds/drop.wav"
+    }
+
+    Audio {
+        id: dropSound2
+        source: "sounds/drop.wav"
     }
     
     Tabs {
@@ -162,6 +181,8 @@ MainView {
                                 fallingCoin.y = 0;
                                 fallingCoin.color = Model.turn ? p1 : p0
                                 repeater.itemAt(i).z = -11
+                                if (playSound.checked)
+                                    dropSound.play();
                                 fallingAnimation.start();
                             }
 
@@ -212,6 +233,8 @@ MainView {
                                 fallingCoin2.y = 0;
                                 fallingCoin2.color = Model.turn ? p1 : p0
                                 repeater.itemAt(i).z = -11
+                                if (playSound.checked)
+                                    dropSound2.play();
                                 fallingAnimation2.start();
                             }
 
@@ -257,6 +280,15 @@ MainView {
 
                 Column {
                     anchors.fill: parent
+
+                    ListItem.Standard {
+                        text: i18n.tr("Sound")
+                        control: Switch {
+                            id: playSound
+                            anchors.verticalCenter: parent.verticalCenter
+                            checked: true
+                        }
+                    }
 
                     ListItem.Standard {
                         text: i18n.tr("Play against machine")
