@@ -165,6 +165,18 @@ function movePossible (array, index) {
     return false;
 }
 
+function possibleMoveExists() {
+    if (score[0] + score[1] === 64)
+        return false;
+
+    for (var i = 0; i < 8; i++)
+        for (var j = 0; j < 8; j++)
+            if (movePossible(state, i * 8 + j))
+                return true;
+
+    return false;
+}
+
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));

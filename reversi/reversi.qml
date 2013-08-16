@@ -35,18 +35,16 @@ MainView {
             Model.set(index);
             Model.switchTurn();
             syncToModel();
-
-            if (!checkEnding() && againstMachine.checked)
-                machineMove();
+            flipWaitAnimation.start()
         }
     }
 
+    property bool prevWasImpossible: false;
+
     function checkEnding() {
         if (Model.score[0] + Model.score[1] !== 64)
-            return false;
-
+            return false
         PopupUtils.open(Model.score[0] === Model.score[1] ? tieDialog : winDialog, null)
-
         return true;
     }
 
@@ -74,10 +72,20 @@ MainView {
             resetSound.play();
         Model.reset();
         syncToModel();
+        flipWaitAnimation.start();
+//        if (!goFirst.checked)
+//            machineMove();
+    }
 
-        if (!goFirst.checked)
-            machineMove();
-
+    SequentialAnimation {
+        id: flipWaitAnimation
+        PauseAnimation { duration: 500 }
+        ScriptAction {
+            script: {
+                if (!checkEnding() && againstMachine.checked && Model.turn == goFirst.checked)
+                    machineMove();
+            }
+        }
     }
 
     function markPossibleMoves() {
@@ -196,22 +204,75 @@ MainView {
                             id : repeater
                             model: 64
 
-                            UbuntuShape {
-                                id: cell
+                            Flipable {
+                                id: flipable
 
                                 width: (gameField.width - units.gu(7)) / 8
                                 height: width
 
-                                radius: "medium"
-                                color: "white"
+                                //either side can be either color
+                                property bool flipped: false
+                                property int currentPlayer: -1
 
-                                //only 0 or 1
                                 function setToPlayer (player) {
-                                    color = (player === -1) ? "white" : (player === 1) ? p1 : p0
+                                    if (player === -1) {
+                                        frontCell.color = "white"
+                                        backCell.color = "white"
+                                        return;
+                                    }
+
+                                    if (player !== currentPlayer) {
+                                        if (flipable.flipped)
+                                            frontCell.color = (player === 1) ? p1 : p0
+                                        else
+                                            backCell.color = (player === 1) ? p1 : p0
+
+                                        flipable.flipped = !flipable.flipped
+                                        currentPlayer = player
+                                    }
                                 }
 
                                 function markPossible() {
-                                    color = UbuntuColors.warmGrey
+                                    frontCell.color = UbuntuColors.warmGrey
+                                    backCell.color = UbuntuColors.warmGrey
+                                }
+
+                                transform: Rotation {
+                                    id: rotation
+                                    origin.x: flipable.width/2
+                                    origin.y: flipable.height/2
+                                    axis.x: 0; axis.y: 1; axis.z: 0     // set axis.y to 1 to rotate around y-axis
+                                    angle: 0    // the default angle
+                                }
+
+                                states: State {
+                                    name: "back"
+                                    PropertyChanges { target: rotation; angle: 180 }
+                                    when: flipable.flipped
+                                }
+
+                                transitions: Transition {
+                                    NumberAnimation { target: rotation; property: "angle"; duration: 500 }
+                                }
+
+                                front: UbuntuShape {
+                                    id: frontCell
+
+                                    width: (gameField.width - units.gu(7)) / 8
+                                    height: width
+
+                                    radius: "medium"
+                                    color: "white"
+                                }
+
+                                back: UbuntuShape {
+                                    id: backCell
+
+                                    width: (gameField.width - units.gu(7)) / 8
+                                    height: width
+
+                                    radius: "medium"
+                                    color: "white"
                                 }
 
                                 MouseArea {
