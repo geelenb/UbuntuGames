@@ -29,9 +29,12 @@ MainView {
     property string p1: "#DD4814"
     property string p0: "#2C001E"
 
+    property bool busy: false
+
     // main functions
     function clicked(index) {
-        if (Model.movePossible(Model.state, index)) {
+        if (!busy && Model.movePossible(Model.state, index)) {
+            busy = true;
             Model.set(index);
             Model.switchTurn();
             syncToModel();
@@ -73,8 +76,6 @@ MainView {
         Model.reset();
         syncToModel();
         flipWaitAnimation.start();
-//        if (!goFirst.checked)
-//            machineMove();
     }
 
     SequentialAnimation {
@@ -84,6 +85,7 @@ MainView {
             script: {
                 if (!checkEnding() && againstMachine.checked && Model.turn == goFirst.checked)
                     machineMove();
+                busy = false;
             }
         }
     }
