@@ -5,23 +5,14 @@ import Ubuntu.Components.Popups 0.1
 import Ubuntu.Components.ListItems 0.1 as ListItem
 import "model.js" as Model
 
-/*!
-    \brief MainView with a Label and Button elements.
-*/
-
 MainView {
     id: main
-    // objectName for functional testing purposes (autopilot-qt5)
     objectName: "mainView"
     
     // Note! applicationName needs to match the .desktop filename
     applicationName: "Reversi"
     
-    /* 
-     This property enables the application to change orientation 
-     when the device is rotated. The default is false.
-    */
-    //automaticOrientation: true
+    automaticOrientation: true
     
     width: units.gu(40)
     height: units.gu(75)
@@ -182,104 +173,109 @@ MainView {
                         }
                     }
                 }
-
                 Rectangle {
-                    id: gameField
-
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    anchors.top: scoreRect.bottom
-
-                    width: Math.min(parent.width, parent.height) - units.gu(3)
-                    height: width
-
+                    anchors.bottom: parent.bottom
+                    anchors.top: (parent.width > parent.height + units.gu(15)) ? parent.top : scoreRect.bottom
                     color: "transparent"
 
+                    Rectangle {
+                        id: gameField
 
-                    Grid {
-                        columns: 8
-                        rows: 8
-                        rowSpacing: units.gu(1)
-                        columnSpacing: units.gu(1)
+                        anchors.centerIn: parent
 
-                        Repeater {
-                            id : repeater
-                            model: 64
+                        width: Math.min(parent.width, parent.height) - units.gu(3)
+                        height: width
 
-                            Flipable {
-                                id: flipable
+                        color: "transparent"
 
-                                width: (gameField.width - units.gu(7)) / 8
-                                height: width
 
-                                //either side can be either color
-                                property bool flipped: false
-                                property int currentPlayer: -1
+                        Grid {
+                            columns: 8
+                            rows: 8
+                            rowSpacing: units.gu(1)
+                            columnSpacing: units.gu(1)
 
-                                function setToPlayer (player) {
-                                    if (player === -1) {
-                                        frontCell.color = "white"
-                                        backCell.color = "white"
-                                        return;
-                                    }
+                            Repeater {
+                                id : repeater
+                                model: 64
 
-                                    if (player !== currentPlayer) {
-                                        if (flipable.flipped)
-                                            frontCell.color = (player === 1) ? p1 : p0
-                                        else
-                                            backCell.color = (player === 1) ? p1 : p0
-
-                                        flipable.flipped = !flipable.flipped
-                                        currentPlayer = player
-                                    }
-                                }
-
-                                function markPossible() {
-                                    frontCell.color = UbuntuColors.warmGrey
-                                    backCell.color = UbuntuColors.warmGrey
-                                }
-
-                                transform: Rotation {
-                                    id: rotation
-                                    origin.x: flipable.width/2
-                                    origin.y: flipable.height/2
-                                    axis.x: 0; axis.y: 1; axis.z: 0     // set axis.y to 1 to rotate around y-axis
-                                    angle: 0    // the default angle
-                                }
-
-                                states: State {
-                                    name: "back"
-                                    PropertyChanges { target: rotation; angle: 180 }
-                                    when: flipable.flipped
-                                }
-
-                                transitions: Transition {
-                                    NumberAnimation { target: rotation; property: "angle"; duration: 500 }
-                                }
-
-                                front: UbuntuShape {
-                                    id: frontCell
+                                Flipable {
+                                    id: flipable
 
                                     width: (gameField.width - units.gu(7)) / 8
                                     height: width
 
-                                    radius: "medium"
-                                    color: "white"
-                                }
+                                    //either side can be either color
+                                    property bool flipped: false
+                                    property int currentPlayer: -1
 
-                                back: UbuntuShape {
-                                    id: backCell
+                                    function setToPlayer (player) {
+                                        if (player === -1) {
+                                            frontCell.color = "white"
+                                            backCell.color = "white"
+                                            return;
+                                        }
 
-                                    width: (gameField.width - units.gu(7)) / 8
-                                    height: width
+                                        if (player !== currentPlayer) {
+                                            if (flipable.flipped)
+                                                frontCell.color = (player === 1) ? p1 : p0
+                                            else
+                                                backCell.color = (player === 1) ? p1 : p0
 
-                                    radius: "medium"
-                                    color: "white"
-                                }
+                                            flipable.flipped = !flipable.flipped
+                                            currentPlayer = player
+                                        }
+                                    }
 
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: main.clicked(index)
+                                    function markPossible() {
+                                        frontCell.color = UbuntuColors.warmGrey
+                                        backCell.color = UbuntuColors.warmGrey
+                                    }
+
+                                    transform: Rotation {
+                                        id: rotation
+                                        origin.x: flipable.width/2
+                                        origin.y: flipable.height/2
+                                        axis.x: 0; axis.y: 1; axis.z: 0     // set axis.y to 1 to rotate around y-axis
+                                        angle: 0    // the default angle
+                                    }
+
+                                    states: State {
+                                        name: "back"
+                                        PropertyChanges { target: rotation; angle: 180 }
+                                        when: flipable.flipped
+                                    }
+
+                                    transitions: Transition {
+                                        NumberAnimation { target: rotation; property: "angle"; duration: 500 }
+                                    }
+
+                                    front: UbuntuShape {
+                                        id: frontCell
+
+                                        width: (gameField.width - units.gu(7)) / 8
+                                        height: width
+
+                                        radius: "medium"
+                                        color: "white"
+                                    }
+
+                                    back: UbuntuShape {
+                                        id: backCell
+
+                                        width: (gameField.width - units.gu(7)) / 8
+                                        height: width
+
+                                        radius: "medium"
+                                        color: "white"
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: main.clicked(index)
+                                    }
                                 }
                             }
                         }
