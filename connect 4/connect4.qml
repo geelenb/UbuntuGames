@@ -6,23 +6,13 @@ import Ubuntu.Components.ListItems 0.1 as ListItem
 
 import "model.js" as Model
 
-/*!
-    \brief MainView with a Label and Button elements.
-*/
-
 MainView {
     id: main
-    // objectName for functional testing purposes (autopilot-qt5)
     objectName: "mainView"
     
-    // Note! applicationName needs to match the .desktop filename
     applicationName: "connect4"
     
-    /* 
-     This property enables the application to change orientation 
-     when the device is rotated. The default is false.
-    */
-    //automaticOrientation: true
+    automaticOrientation: true
     
     width: units.gu(40)
     height: units.gu(75)
