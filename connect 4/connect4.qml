@@ -317,7 +317,7 @@ MainView {
             id: dialogue
 
             title: (!againstMachine.checked || (goFirst.checked != Model.turn)) ? i18n.tr("Winner!") : i18n.tr("Loss!")
-            text: i18n.tr(Model.turn ? "Orange won the game." : "Purple won the game.")
+            text: Model.turn ? i18n.tr("Orange won the game.") : i18n.tr("Purple won the game.")
 
             Button {
                 text: i18n.tr("Back")

@@ -1,0 +1,78 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-08 21:05+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: connect4.qml:95
+msgid "Connect 4"
+msgstr ""
+
+#: connect4.qml:258 connect4.qml:331 connect4.qml:358 connect4.qml:385
+msgid "New Game"
+msgstr ""
+
+#: connect4.qml:275
+msgid "Sound"
+msgstr ""
+
+#: connect4.qml:284
+msgid "Play against machine"
+msgstr ""
+
+#: connect4.qml:293
+msgid "Go first"
+msgstr ""
+
+#: connect4.qml:304
+msgid "Difficulty"
+msgstr ""
+
+#: connect4.qml:319
+msgid "Winner!"
+msgstr ""
+
+#: connect4.qml:319
+msgid "Loss!"
+msgstr ""
+
+#: connect4.qml:320
+msgid "Orange won the game."
+msgstr ""
+
+#: connect4.qml:320
+msgid "Purple won the game."
+msgstr ""
+
+#: connect4.qml:323 connect4.qml:350 connect4.qml:377
+msgid "Back"
+msgstr ""
+
+#: connect4.qml:346
+msgid "Reset"
+msgstr ""
+
+#: connect4.qml:347
+msgid "Reset the current game?"
+msgstr ""
+
+#: connect4.qml:373
+msgid "Tie!"
+msgstr ""
+
+#: connect4.qml:374
+msgid "It's a tied game!"
+msgstr ""
